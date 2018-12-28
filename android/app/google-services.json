@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1057498103529",
+    "firebase_url": "https://reactnativedemochat.firebaseio.com",
+    "project_id": "reactnativedemochat",
+    "storage_bucket": "reactnativedemochat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057498103529:android:ce16c9b0f47cd394",
+        "android_client_info": {
+          "package_name": "com.exercise3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1057498103529-8cd587q6nniiuvjnmhfm5avqebl7p8cg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkq_vhYm2UYxRZaD-8xJDB-Sc2MPlBGfg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
