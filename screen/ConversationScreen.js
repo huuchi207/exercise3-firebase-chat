@@ -20,12 +20,17 @@ class ConversationScreen extends React.Component {
     }
 
     componentDidMount() {
-        FIREBASE_DB_CHAT_REF.on('value', (snapshot) => {
-            console.log("snapshot", snapshot);
-            this.props.loadMessage(snapshot.val())
-        }, (errorObject) => {
-            // dispatch(loadMessagesError(errorObject.message))
-        })
+        // FIREBASE_DB_CHAT_REF.on('value', (snapshot) => {
+        //     console.log("snapshot", snapshot.val());
+        //     // this.props.loadMessage(snapshot.val())
+        // }, (errorObject) => {
+        //     // dispatch(loadMessagesError(errorObject.message))
+        // });
+        FIREBASE_DB_CHAT_REF.on("child_added", function(snapshot, prevChildKey) {
+            var newPost = snapshot.val();
+            console.log("newPost", newPost);
+            this.props.addMessage(newPost);
+        });
     }
 
 
