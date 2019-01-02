@@ -9,26 +9,27 @@ const styles= StyleSheet.create({
     msg: {
         flex: 1
     },
-    blankSpace: 5
+    blankSpace: {
+        flex: 5
+    }
 })
 export const CustomMsgView = ({msg, isMyMsg, createdAt})=> (
-  <View style={styles.container}>
-      <ViewPriority isMyMsg={isMyMsg}/>
-  </View>
+    <ViewPriority isMyMsg={isMyMsg} msg={msg}/>
 );
 
-const ViewPriority=(isMyMsg) => {
+const ViewPriority=({isMyMsg,msg}) => {
+    console.log("isMyMsg", isMyMsg);
     if (!isMyMsg){
         return (
-        <View>
+        <View style={styles.container}>
             <Text style={styles.msg}>{msg}</Text>
             <View style={styles.blankSpace}/>
         </View>)
     } else {
             return (
-        <View>
+        <View style={styles.container}>
             <View style={styles.blankSpace}/>
             <Text style={styles.msg}>{msg}</Text>
         </View>)
     }
-}
+};

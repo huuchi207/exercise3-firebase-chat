@@ -19,36 +19,47 @@ class ConversationScreen extends React.Component {
         }
     }
 
-    componentDidMount() {
-        // FIREBASE_DB_CHAT_REF.on('value', (snapshot) => {
-        //     console.log("snapshot", snapshot.val());
-        //     // this.props.loadMessage(snapshot.val())
-        // }, (errorObject) => {
-        //     // dispatch(loadMessagesError(errorObject.message))
-        // });
-        FIREBASE_DB_CHAT_REF.on("child_added", function(snapshot, prevChildKey) {
-            var newPost = snapshot.val();
-            console.log("newPost", newPost);
-            this.props.addMessage(newPost);
+    componentDidMount()  {
+        FIREBASE_DB_CHAT_REF.once('value', async (snap) => {
+            // get children as an array
+            var items = [];
+            snap.forEach((child) => {
+                items.push(child.val());
+            });
+            // console.log("items", items);
+            await this.props.loadMessage(items);
+
+            setTimeout(() => this.flatList.scrollToEnd(), 50)
+        });
+        FIREBASE_DB_CHAT_REF.on('child_added', async (snap) => {
+            console.log("snap.val()", snap.val());
+            await this.props.addMessage(snap.val());
+            setTimeout(() => this.flatList.scrollToEnd(), 50)
         });
     }
 
 
     render() {
+        // console.log("this.props.conversation", this.props.conversation);
         return <View style={styles.container}>
             <FlatList
                 style={styles.conversation}
                 data={this.props.conversation}
                 renderItem={({item, index}) => (
-                    <Text>{item.text}</Text>
+                    <CustomMsgView msg={item.text}
+                                   isMyMsg={firebase.auth().currentUser.uid === item.user.id}
+                                   createdAt={item.createdAt}/>
                 )}
-                // keyExtractor={(item, index) => index}
+                keyExtractor={(item, index) => index}
+                ref={ref => this.flatList = ref}
             />
             <View style={styles.enterMessageView}>
                 <TextInput style={styles.textInput} onChangeText={(text) => {
                     this.setState({newMessage: text})
                 }
-                }/>
+                } ref={input => {
+                    this.textInput = input
+                }}/>
                 <TouchableOpacity style={styles.buttonSend} onPress={this.onSendMsg}>
                     <Text>Send</Text>
                 </TouchableOpacity>
@@ -62,7 +73,7 @@ class ConversationScreen extends React.Component {
         }
         let currentUser = firebase.auth().currentUser;
         let createdAt = new Date().getTime();
-        let message= this.state.newMessage;
+        let message = this.state.newMessage;
         let chatMessage = {
             text: message,
             createdAt: createdAt,
@@ -73,11 +84,11 @@ class ConversationScreen extends React.Component {
         }
 
         FIREBASE_DB_CHAT_REF.push().set(chatMessage, (error) => {
-            // if (error) {
-            //     dispatch(chatMessageError(error.message))
-            // } else {
-            //     dispatch(chatMessageSuccess())
-            // }
+            if (error) {
+                console.log("error", error);
+            } else {
+                this.textInput.clear()
+            }
         })
     }
 }
@@ -88,7 +99,8 @@ const styles = StyleSheet.create({
         flexDirection: "column"
     },
     conversation: {
-        height: Dimensions.get("window").height / 13 * 12
+        // height: Dimensions.get("window").height / 13 * 12,
+        flex: 1
     },
     enterMessageView: {
         height: Dimensions.get("window").height / 13,
