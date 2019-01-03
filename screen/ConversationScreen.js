@@ -15,12 +15,13 @@ class ConversationScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            newMessage: ""
+            newMessage: "",
         }
     }
 
     componentDidMount()  {
-        FIREBASE_DB_CHAT_REF.once('value', async (snap) => {
+        console.log("this.props.navigation", this.props.navigation);
+        FIREBASE_DB_CHAT_REF.child(this.props.navigation.state.params.conversationId).once('value', async (snap) => {
             // get children as an array
             var items = [];
             snap.forEach((child) => {
@@ -31,13 +32,17 @@ class ConversationScreen extends React.Component {
 
             setTimeout(() => this.flatList.scrollToEnd(), 50)
         });
-        FIREBASE_DB_CHAT_REF.on('child_added', async (snap) => {
+        FIREBASE_DB_CHAT_REF.child(this.props.navigation.state.params.conversationId).on('child_added', async (snap) => {
             console.log("snap.val()", snap.val());
             await this.props.addMessage(snap.val());
             setTimeout(() => this.flatList.scrollToEnd(), 50)
         });
     }
+    componentWillUnmount() {
+        FIREBASE_DB_CHAT_REF.child(this.props.navigation.state.params.conversationId).off('child_added', async (snap) => {
 
+        });
+    }
 
     render() {
         // console.log("this.props.conversation", this.props.conversation);
@@ -50,7 +55,7 @@ class ConversationScreen extends React.Component {
                                    isMyMsg={firebase.auth().currentUser.uid === item.user.id}
                                    createdAt={item.createdAt}/>
                 )}
-                keyExtractor={(item, index) => index}
+                keyExtractor={(item, index) => index.toString()}
                 ref={ref => this.flatList = ref}
             />
             <View style={styles.enterMessageView}>
@@ -83,7 +88,7 @@ class ConversationScreen extends React.Component {
             }
         }
 
-        FIREBASE_DB_CHAT_REF.push().set(chatMessage, (error) => {
+        FIREBASE_DB_CHAT_REF.child(this.props.navigation.state.params.conversationId).push().set(chatMessage, (error) => {
             if (error) {
                 console.log("error", error);
             } else {

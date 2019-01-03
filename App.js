@@ -13,6 +13,7 @@ import LoginScreen from "./screen/LoginScreen";
 import ConversationScreen from "./screen/ConversationScreen";
 import store from './redux/store';
 import {Provider} from 'react-redux';
+import ListUser from "./screen/ListUser";
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -34,7 +35,8 @@ export default class App extends Component<Props> {
 const AppNavigator = createStackNavigator(
     {
         LoginScreen,
-        ConversationScreen
+        ConversationScreen,
+        ListUser
     },
     {
         initialRouteName: "LoginScreen",

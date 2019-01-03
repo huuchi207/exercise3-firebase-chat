@@ -4,7 +4,9 @@ import React from "react";
 const styles= StyleSheet.create({
     container: {
         flexDirection: "row",
-        height: 70
+        height: 70,
+        marginLeft: 10,
+        marginRight: 10
     },
     msg: {
         flex: 1

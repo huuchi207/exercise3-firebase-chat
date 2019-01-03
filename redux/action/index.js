@@ -9,3 +9,6 @@ export const removeCurrentUser= ()=> ({type: Constant.REMOVE_CURRENT_USER});
 export const addMessage= (msg) => ({payload: msg, type: Constant.ADD_MSG});
 
 export const loadMessage= (msgs) => ({payload: msgs, type: Constant.ALL_MSG});
+
+export const loadAllUser= (users) => ({type: Constant.ALL_USER, payload: users});
+

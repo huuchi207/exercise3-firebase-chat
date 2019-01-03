@@ -8,8 +8,8 @@ class LoginScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            userName: "",
-            password: "",
+            userName: "user1@gmail.com",
+            password: "123456",
             error: ""
         }
     }
@@ -25,6 +25,7 @@ class LoginScreen extends React.Component {
                                    this.setState({userName: userName})
                                }
                                }
+                               defaultValue='user1@gmail.com'
                     />
                 </View>
                 <View style={styles.userNameView}>
@@ -33,8 +34,8 @@ class LoginScreen extends React.Component {
                                secureTextEntry={true}
                                onChangeText={(password) => {
                                    this.setState({password: password})
-                               }
-                               }
+                               }}
+                               defaultValue='123456'
                     />
                 </View>
                 <Text style={styles.errorText}>{this.state.error}</Text>
@@ -53,9 +54,7 @@ class LoginScreen extends React.Component {
             firebase.auth().signInWithEmailAndPassword(this.state.userName
                 , this.state.password).
             then(userCredential => {
-                this.props.saveCurrentUser(userCredential);
-                this.props.navigation.push("ConversationScreen");
-                console.log("userCredential", userCredential);
+                this.props.navigation.navigate("ListUser");
             }).catch(error=>{
                 this.setState({error: error.message});
                 console.log("error", error.message);
@@ -67,7 +66,6 @@ class LoginScreen extends React.Component {
 
 
 const mapStateToProps = state =>({
-    userInfo: state.userInfo
 });
 
 export default connect(mapStateToProps, actions)(LoginScreen);
